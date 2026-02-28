@@ -14,7 +14,7 @@ export default function Home() {
           <Shield className="w-10 h-10 text-emerald-400" />
         </div>
         <h1 className="text-5xl font-bold tracking-tight text-white mb-6">
-          Web Security Sandbox
+          Security Suite
         </h1>
         <p className="text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">
           A suite of advanced tools to analyze, preview, and protect against modern web threats.
