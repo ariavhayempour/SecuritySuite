@@ -1,20 +1,94 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# WebSec Sandbox
 
-# Run and deploy your AI Studio app
+A suite of advanced web security tools powered by Google's Gemini AI for analyzing and protecting against modern web threats.
 
-This contains everything you need to run your app locally.
+## Features
 
-View your app in AI Studio: https://ai.studio/apps/f9579dd3-7a3c-4b04-aac5-23ab1e473ce5
+### 🔍 QR Code Risk Analyzer
+Upload any QR code image to extract its destination URL and analyze it for security risks before scanning with your phone. The tool detects:
+- Phishing attempts
+- Typosquatting domains
+- Suspicious URL patterns
+- Domain age analysis
+- Risk scoring (0-100)
 
-## Run Locally
+### 🔗 SecureLink Redirect Proxy
+Safely analyze suspicious links by tracing redirect chains and examining final destinations. Features include:
+- Complete redirect chain tracing (up to 10 hops)
+- HTML content analysis for hidden threats
+- Detection of fake login forms, obfuscated scripts, and hidden iframes
+- Phishing detection
+- Risk assessment with detailed explanations
 
-**Prerequisites:**  Node.js
+## Tech Stack
 
+- **Frontend**: React 19, TypeScript, TailwindCSS, Motion (Framer Motion)
+- **Backend**: Express.js, Node.js
+- **AI/ML**: Google Gemini AI (gemini-2.0-flash & gemini-3-flash-preview)
+- **Build Tools**: Vite, tsx
+- **Routing**: React Router DOM
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Prerequisites
+
+- Node.js (v18 or higher recommended)
+- Gemini API key from [Google AI Studio](https://ai.google.dev/)
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd CheeseHacks
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env` file in the root directory and add your Gemini API key:
+   ```
+   GEMINI_API_KEY=your_api_key_here
+   ```
+
+## Running Locally
+
+Start the development server:
+```bash
+npm run dev
+```
+
+The app will be available at `http://localhost:3000`
+
+## Available Scripts
+
+- `npm run dev` - Start development server with Express backend and Vite
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Type check with TypeScript
+- `npm run clean` - Remove build artifacts
+
+## Deployment
+
+The project includes Vercel serverless function support (`api/trace.ts`) for production deployments.
+
+## Project Structure
+
+```
+├── src/
+│   ├── pages/
+│   │   ├── Home.tsx          # Landing page
+│   │   ├── QRAnalyzer.tsx    # QR code analysis tool
+│   │   └── SecureLink.tsx    # Link redirect analyzer
+│   ├── components/           # Reusable UI components
+│   └── lib/                  # Utility functions
+├── api/
+│   └── trace.ts              # Vercel serverless function for URL tracing
+├── server.ts                 # Express development server
+└── index.html                # Entry HTML file
+
+```
+
+## Security Note
+
+This tool is designed for educational and security analysis purposes. Always exercise caution when analyzing potentially malicious content.
