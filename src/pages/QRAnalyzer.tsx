@@ -30,16 +30,18 @@ export default function QRAnalyzer() {
     return () => { cameraStream?.getTracks().forEach(t => t.stop()); };
   }, [cameraStream]);
 
+  useEffect(() => {
+    if (cameraStream && videoRef.current) {
+      videoRef.current.srcObject = cameraStream;
+    }
+  }, [cameraStream]);
+
   const startCamera = async () => {
     setError(null);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
       setCameraStream(stream);
       setMode("camera");
-      // Wait for video element to mount then assign stream
-      setTimeout(() => {
-        if (videoRef.current) videoRef.current.srcObject = stream;
-      }, 0);
     } catch {
       setError("Could not access camera. Please allow camera permissions and try again.");
     }
@@ -106,7 +108,7 @@ export default function QRAnalyzer() {
       const url = await decodeQRFromImage(image);
 
       const response = await ai.models.generateContent({
-        model: "gemini-2.0-flash-lite",
+        model: "gemini-2.0-flash",
         contents: {
           parts: [
             {
