@@ -27,13 +27,34 @@ export default function QRAnalyzer() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    return () => { cameraStream?.getTracks().forEach(t => t.stop()); };
-  }, [cameraStream]);
+    if (!cameraStream) return;
+    if (videoRef.current) videoRef.current.srcObject = cameraStream;
 
-  useEffect(() => {
-    if (cameraStream && videoRef.current) {
-      videoRef.current.srcObject = cameraStream;
-    }
+    const intervalId = setInterval(() => {
+      if (!videoRef.current || !canvasRef.current) return;
+      const video = videoRef.current;
+      if (video.readyState < video.HAVE_ENOUGH_DATA || video.videoWidth === 0) return;
+      const canvas = canvasRef.current;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      ctx.drawImage(video, 0, 0);
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const code = jsQR(imageData.data, imageData.width, imageData.height);
+      if (code) {
+        setImage(canvas.toDataURL("image/png"));
+        setResult(null);
+        setError(null);
+        setCameraStream(null);
+        setMode("upload");
+      }
+    }, 200);
+
+    return () => {
+      clearInterval(intervalId);
+      cameraStream.getTracks().forEach(t => t.stop());
+    };
   }, [cameraStream]);
 
   const startCamera = async () => {
@@ -205,19 +226,18 @@ export default function QRAnalyzer() {
                 className="w-full aspect-square object-cover scale-x-[-1]"
               />
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-48 h-48 border-2 border-emerald-400/60 rounded-2xl" />
+                <div className="w-48 h-48 border-2 border-emerald-400/60 rounded-2xl animate-pulse" />
               </div>
-              <div className="absolute bottom-4 inset-x-0 flex items-center justify-center gap-4">
+              <div className="absolute bottom-4 inset-x-0 flex flex-col items-center gap-3">
+                <span className="text-xs text-emerald-400/80 bg-zinc-900/70 px-3 py-1 rounded-full backdrop-blur-sm">
+                  Point at a QR code to scan automatically
+                </span>
                 <button
                   onClick={stopCamera}
                   className="p-3 bg-zinc-900/80 backdrop-blur-sm text-zinc-300 rounded-full hover:bg-red-500/80 hover:text-white transition-all"
                 >
                   <X className="w-5 h-5" />
                 </button>
-                <button
-                  onClick={capturePhoto}
-                  className="w-16 h-16 bg-emerald-500 hover:bg-emerald-400 rounded-full border-4 border-white/20 transition-all active:scale-95"
-                />
               </div>
             </div>
           )}
