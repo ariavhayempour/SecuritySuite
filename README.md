@@ -22,11 +22,14 @@ Safely analyze suspicious links by tracing redirect chains and examining final d
 
 ## Tech Stack
 
-- **Frontend**: React 19, TypeScript, TailwindCSS, Motion (Framer Motion)
+- **Frontend**: React 19, TypeScript, TailwindCSS v4, Motion (Framer Motion)
 - **Backend**: Express.js, Node.js
-- **AI/ML**: Google Gemini AI (gemini-2.0-flash & gemini-3-flash-preview)
-- **Build Tools**: Vite, tsx
-- **Routing**: React Router DOM
+- **AI/ML**: Google Gemini AI (`gemini-2.5-flash`)
+- **QR Decoding**: jsQR
+- **Icons**: Lucide React
+- **Utilities**: clsx, tailwind-merge
+- **Build Tools**: Vite 6, tsx
+- **Routing**: React Router DOM v7
 
 ## Prerequisites
 
@@ -68,10 +71,6 @@ The app will be available at `http://localhost:3000`
 - `npm run lint` - Type check with TypeScript
 - `npm run clean` - Remove build artifacts
 
-## Deployment
-
-The project includes Vercel serverless function support (`api/trace.ts`) for production deployments.
-
 ## Project Structure
 
 ```
@@ -82,11 +81,8 @@ The project includes Vercel serverless function support (`api/trace.ts`) for pro
 │   │   └── SecureLink.tsx    # Link redirect analyzer
 │   ├── components/           # Reusable UI components
 │   └── lib/                  # Utility functions
-├── api/
-│   └── trace.ts              # Vercel serverless function for URL tracing
-├── server.ts                 # Express development server
+├── server.ts                 # Express server
 └── index.html                # Entry HTML file
-
 ```
 
 ## Security Note
